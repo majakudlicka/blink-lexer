@@ -122,6 +122,7 @@ export class Lexer {
 
     /// Recognizes and returns an identifier token.
     recognizeIdentifier() {
+        console.log('in recognize identifier...');
         let identifier = '';
         let line = this.line;
         let column = this.column;
@@ -130,7 +131,7 @@ export class Lexer {
         while (position < this.input.length) {
             let character = this.input.charAt(position);
 
-            if (!(CharUtils.isLetter(character) || CharUtils.isDigit(character) || character === '-')) {
+            if (!(CharUtils.isLetter(character) || CharUtils.isDigit(character) || ['_', '-', '$'].includes(character))) {
                 break;
             }
 
@@ -138,8 +139,23 @@ export class Lexer {
             position += 1;
         }
 
+        console.log('at the end of the loop identifier is ', identifier);
+        console.log('typeof identifier ', typeof identifier);
+
         this.position += identifier.length;
         this.column += identifier.length;
+
+        if (identifier === 'true') {
+            return new Token(TokenType.True, 'true', line, column);
+        } else if (identifier === 'false') {
+            return new Token(TokenType.False, 'false', line, column);
+        } else if (identifier === 'class') {
+            return new Token(TokenType.Class, 'class', line, column);
+        } else if (identifier === 'func') {
+            return new Token(TokenType.Func, 'func', line, column);
+        } else if (identifier === 'else') {
+            return new Token(TokenType.Else, 'else', line, column);
+        }
 
         return new Token(TokenType.Identifier, identifier, line, column);
     }

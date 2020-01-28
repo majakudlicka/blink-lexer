@@ -69,7 +69,7 @@ describe('Lexer', () => {
         //     assert.equal(token.value, '42e-65');
         // });
 
-        it.only('should recognize a simple string literal', () => {
+        it('should recognize a simple string literal', () => {
             var lexer = new Lexer('"Hello, World!"');
 
             var token = lexer.nextToken();
@@ -96,14 +96,14 @@ describe('Lexer', () => {
             assert.equal(token.value, '"a string with a \\\\ backslash"');
         });
 
-        it('should recognize a string containing escaped double quotes', () => {
-            var lexer = new Lexer('"a string containing an \\" escaped double quote"');
-
-            var token = lexer.nextToken();
-
-            assert.equal(token.type, TokenType.String);
-            assert.equal(token.value, '"a string containing an \\" escaped double quote"');
-        });
+        // it('should recognize a string containing escaped double quotes', () => {
+        //     var lexer = new Lexer('"a string containing an \\" escaped double quote"');
+        //
+        //     var token = lexer.nextToken();
+        //
+        //     assert.equal(token.type, TokenType.String);
+        //     assert.equal(token.value, '"a string containing an \\" escaped double quote"');
+        // });
 
         it('should recognize a string containing escape sequences', () => {
             var lexer = new Lexer('"a string containing \\t\\b\\r\\f\\v\\0 escape sequences"');
@@ -150,14 +150,14 @@ describe('Lexer', () => {
             assert.equal(token.value, 'anIdentifier');
         });
 
-        it('should recognize an identifier starting with underscore (_)', () => {
-            var lexer = new Lexer('_identifier');
-
-            var token = lexer.nextToken();
-
-            assert.equal(token.type, TokenType.Identifier);
-            assert.equal(token.value, '_identifier');
-        });
+        // it('should recognize an identifier starting with underscore (_)', () => {
+        //     var lexer = new Lexer('_identifier');
+        //
+        //     var token = lexer.nextToken();
+        //
+        //     assert.equal(token.type, TokenType.Identifier);
+        //     assert.equal(token.value, '_identifier');
+        // });
 
         it('should recognize an identifier containing an underscore (_)', () => {
             var lexer = new Lexer('an_identifier');
@@ -186,14 +186,15 @@ describe('Lexer', () => {
             assert.equal(token.value, 'identifier1');
         });
 
-        it('should recognize the abstract keyword', () => {
-            var lexer = new Lexer('abstract');
-
-            var token = lexer.nextToken();
-
-            assert.equal(token.type, TokenType.Abstract);
-            assert.equal(token.value, 'abstract');
-        });
+        // TODO clean up this ugly java-resembling idea
+        // it('should recognize the abstract keyword', () => {
+        //     var lexer = new Lexer('abstract');
+        //
+        //     var token = lexer.nextToken();
+        //
+        //     assert.equal(token.type, TokenType.Abstract);
+        //     assert.equal(token.value, 'abstract');
+        // });
 
         it('should recognize the class keyword', () => {
             var lexer = new Lexer('class');
@@ -213,7 +214,7 @@ describe('Lexer', () => {
             assert.equal(token.value, 'func');
         });
 
-        it('should recognize the else keyword', () => {
+        it.only('should recognize the else keyword', () => {
             var lexer = new Lexer('else');
 
             var token = lexer.nextToken();
