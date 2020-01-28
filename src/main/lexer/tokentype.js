@@ -33,7 +33,7 @@ export var TokenType = {
     // Assignment operators
     LeftArrow: '<-',
     DivEqual: '/=',
-    Equal: '=',
+    Assign: '=',
     MinusEqual: '-=',
     ModuloEqual: '%=',
     PlusEqual: '+=',
@@ -48,7 +48,7 @@ export var TokenType = {
     Times: '*',
 
     // Comparison operators
-    DoubleEqual: '==',
+    Equal: '==',
     Greater: '>',
     GreaterOrEqual: '>=',
     Less: '<',

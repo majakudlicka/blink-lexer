@@ -4,7 +4,7 @@ import { Lexer } from '../../main/lexer/lexer'
 
 describe('Lexer', () => {
 
-    describe('#nextToken', () => {
+    describe.only('#nextToken', () => {
 
         it('should recognize a newline character as a single token', () => {
             var lexer = new Lexer('\n');
@@ -214,7 +214,7 @@ describe('Lexer', () => {
             assert.equal(token.value, 'func');
         });
 
-        it.only('should recognize the else keyword', () => {
+        it('should recognize the else keyword', () => {
             var lexer = new Lexer('else');
 
             var token = lexer.nextToken();
@@ -304,14 +304,14 @@ describe('Lexer', () => {
             assert.equal(token.value, 'null');
         });
 
-        it('should recognize the override keyword', () => {
-            var lexer = new Lexer('override');
-
-            var token = lexer.nextToken();
-
-            assert.equal(token.type, TokenType.Override);
-            assert.equal(token.value, 'override');
-        });
+        // it('should recognize the override keyword', () => {
+        //     var lexer = new Lexer('override');
+		//
+        //     var token = lexer.nextToken();
+		//
+        //     assert.equal(token.type, TokenType.Override);
+        //     assert.equal(token.value, 'override');
+        // });
 
         it('should recognize the private keyword', () => {
             var lexer = new Lexer('private');
@@ -322,14 +322,14 @@ describe('Lexer', () => {
             assert.equal(token.value, 'private');
         });
 
-        it('should recognize the protected keyword', () => {
-            var lexer = new Lexer('protected');
-
-            var token = lexer.nextToken();
-
-            assert.equal(token.type, TokenType.Protected);
-            assert.equal(token.value, 'protected');
-        });
+        // it('should recognize the protected keyword', () => {
+        //     var lexer = new Lexer('protected');
+		//
+        //     var token = lexer.nextToken();
+		//
+        //     assert.equal(token.type, TokenType.Protected);
+        //     assert.equal(token.value, 'protected');
+        // });
 
         it('should recognize the return keyword', () => {
             var lexer = new Lexer('return');
@@ -349,14 +349,14 @@ describe('Lexer', () => {
             assert.equal(token.value, 'super');
         });
 
-        it('should recognize the to keyword', () => {
-            var lexer = new Lexer('to');
-
-            var token = lexer.nextToken();
-
-            assert.equal(token.type, TokenType.To);
-            assert.equal(token.value, 'to');
-        });
+        // it('should recognize the to keyword', () => {
+        //     var lexer = new Lexer('to');
+		//
+        //     var token = lexer.nextToken();
+		//
+        //     assert.equal(token.type, TokenType.To);
+        //     assert.equal(token.value, 'to');
+        // });
 
         it('should recognize the this keyword', () => {
             var lexer = new Lexer('this');
@@ -412,77 +412,77 @@ describe('Lexer', () => {
             assert.equal(token.value, '.');
         });
 
-        it('should recognize the left arrow (<-) operator', () => {
-            var lexer = new Lexer('<-');
+        // it.only('should recognize the left arrow (<-) operator', () => {
+        //     var lexer = new Lexer('<-');
+		//
+        //     var token = lexer.nextToken();
+		//
+        //     assert.equal(token.type, TokenType.LeftArrow);
+        //     assert.equal(token.value, '<-');
+        // });
 
-            var token = lexer.nextToken();
+        // it('should recognize the div-equal (/=) operator', () => {
+        //     var lexer = new Lexer('/=');
+		//
+        //     var token = lexer.nextToken();
+		//
+        //     assert.equal(token.type, TokenType.DivEqual);
+        //     assert.equal(token.value, '/=');
+        // });
 
-            assert.equal(token.type, TokenType.LeftArrow);
-            assert.equal(token.value, '<-');
-        });
-
-        it('should recognize the div-equal (/=) operator', () => {
-            var lexer = new Lexer('/=');
-
-            var token = lexer.nextToken();
-
-            assert.equal(token.type, TokenType.DivEqual);
-            assert.equal(token.value, '/=');
-        });
-
-        it('should recognize the equal (=) operator', () => {
+        it('should recognize the assign (=) operator', () => {
             var lexer = new Lexer('=');
 
             var token = lexer.nextToken();
 
-            assert.equal(token.type, TokenType.Equal);
+            assert.equal(token.type, TokenType.Assign);
             assert.equal(token.value, '=');
         });
 
-        it('should recognize the minus-equal (-=) operator', () => {
-            var lexer = new Lexer('-=');
+        // it('should recognize the minus-equal (-=) operator', () => {
+        //     var lexer = new Lexer('-=');
+		//
+        //     var token = lexer.nextToken();
+		//
+        //     assert.equal(token.type, TokenType.MinusEqual);
+        //     assert.equal(token.value, '-=');
+        // });
+		//
+        // it('should recognize the modulo-equal (%=) operator', () => {
+        //     var lexer = new Lexer('%=');
+		//
+        //     var token = lexer.nextToken();
+		//
+        //     assert.equal(token.type, TokenType.ModuloEqual);
+        //     assert.equal(token.value, '%=');
+        // });
 
-            var token = lexer.nextToken();
+        // it('should recognize the plus-equal (+=) operator', () => {
+        //     var lexer = new Lexer('+=');
+		//
+        //     var token = lexer.nextToken();
+		//
+        //     assert.equal(token.type, TokenType.PlusEqual);
+        //     assert.equal(token.value, '+=');
+        // });
 
-            assert.equal(token.type, TokenType.MinusEqual);
-            assert.equal(token.value, '-=');
-        });
+        // it('should recognize the right arrow (->) operator', () => {
+        //     var lexer = new Lexer('->');
+		//
+        //     var token = lexer.nextToken();
+		//
+        //     assert.equal(token.type, TokenType.RightArrow);
+        //     assert.equal(token.value, '->');
+        // });
 
-        it('should recognize the modulo-equal (%=) operator', () => {
-            var lexer = new Lexer('%=');
-
-            var token = lexer.nextToken();
-
-            assert.equal(token.type, TokenType.ModuloEqual);
-            assert.equal(token.value, '%=');
-        });
-
-        it('should recognize the plus-equal (+=) operator', () => {
-            var lexer = new Lexer('+=');
-
-            var token = lexer.nextToken();
-
-            assert.equal(token.type, TokenType.PlusEqual);
-            assert.equal(token.value, '+=');
-        });
-
-        it('should recognize the right arrow (->) operator', () => {
-            var lexer = new Lexer('->');
-
-            var token = lexer.nextToken();
-
-            assert.equal(token.type, TokenType.RightArrow);
-            assert.equal(token.value, '->');
-        });
-
-        it('should recognize the times-equal operator', () => {
-            var lexer = new Lexer('*=');
-
-            var token = lexer.nextToken();
-
-            assert.equal(token.type, TokenType.TimesEqual);
-            assert.equal(token.value, '*=');
-        });
+        // it('should recognize the times-equal operator', () => {
+        //     var lexer = new Lexer('*=');
+		//
+        //     var token = lexer.nextToken();
+		//
+        //     assert.equal(token.type, TokenType.TimesEqual);
+        //     assert.equal(token.value, '*=');
+        // });
 
         it('should recognize the div (/) operator', () => {
             var lexer = new Lexer('/');
@@ -534,7 +534,7 @@ describe('Lexer', () => {
 
             var token = lexer.nextToken();
 
-            assert.equal(token.type, TokenType.DoubleEqual);
+            assert.equal(token.type, TokenType.Equal);
             assert.equal(token.value, '==');
         });
 
@@ -680,24 +680,6 @@ describe('Lexer', () => {
 
             assert.equal(token.type, TokenType.RightParen);
             assert.equal(token.value, ')');
-        });
-
-        it('should recognize a colon (:)', () => {
-            var lexer = new Lexer(':');
-
-            var token = lexer.nextToken();
-
-            assert.equal(token.type, TokenType.Colon);
-            assert.equal(token.value, ':');
-        });
-
-        it('should recognize a comma (,)', () => {
-            var lexer = new Lexer(',');
-
-            var token = lexer.nextToken();
-
-            assert.equal(token.type, TokenType.Comma);
-            assert.equal(token.value, ',');
         });
 
     });

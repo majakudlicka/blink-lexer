@@ -1,7 +1,7 @@
 export class CharUtils {
 
 	static isOperator(char) {
-		return /[+\-*\/\^%=<>]/.test(char);
+		return /[+\-*\/\^%=<>!&|]/.test(char);
 	}
 
 	static isWhitespace(char) {
@@ -21,9 +21,9 @@ export class CharUtils {
 		return /[a-zA-Z]/.test(char);
 	}
 
-	static isParenthesis(char) {
-		return /[()]/.test(char);
-	}
+	// static isParenthesis(char) {
+	// 	return /[()]/.test(char);
+	// }
 
 	static isWhitespaceOrNewLine(char) {
 		return /\s\n/.test(char);
@@ -34,11 +34,19 @@ export class CharUtils {
 		return /\n/.test(char);
 	}
 
+	static isBooleanOperator(char) {
+		return /!&|/.test(char);
+	}
+
 	static isComparisonOperator(char) {
 		return /[<>=]/.test(char);
 	}
 
 	static isBeginningOfNumber(char) {
 		return this.isDigit(char) || char === '.';
+	}
+
+	static isDelimiter(char) {
+		return /[:,{[()\]}]/.test(char);
 	}
 }

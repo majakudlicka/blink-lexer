@@ -12,7 +12,8 @@ export class Lexer {
     }
 
     /// Recognizes and returns a parenthesis token.
-    recognizeParenthesis() {
+	// TODO Could add newLine here
+    recognizeDelimiter() {
         let position = this.position;
         let line = this.line;
         let column = this.column;
@@ -21,11 +22,20 @@ export class Lexer {
         this.position += 1;
         this.column += 1;
 
-        if (character === '(') {
-            return new Token(TokenType.LeftParen, '(', line, column);
-        }
+        const delimiterMap = {
+        	':': 'Colon',
+			',': 'Comma',
+			'{': 'LeftBrace',
+			'[': 'LeftBracket',
+			'(': 'LeftParen',
+			'}': 'RightBrace',
+			']': 'RightBracket',
+			')': 'RightParen'
+		};
 
-        return new Token(TokenType.RightParen, ')', line, column);
+        const delimiterType = delimiterMap[character];
+
+        return new Token(TokenType[delimiterType], character, line, column);
     }
 
     /// Recognizes and returns an operator token.
@@ -36,13 +46,18 @@ export class Lexer {
             return this.recognizeComparisonOperator();
         }
 
-        if (CharUtils.isArithmeticOperator(operator)) {
+        if (CharUtils.isArithmeticOperator(character)) {
             return this.recognizeArithmeticOperator();
         }
+
+        if (CharUtils.isBooleanOperator(character)) {
+        	return this.recognizeBooleanOperator();
+		}
 
     }
 
     recognizeComparisonOperator() {
+    	console.log('recognising comparison operator');
         let position = this.position;
         let line = this.line;
         let column = this.column;
@@ -66,13 +81,13 @@ export class Lexer {
         switch (character) {
             case '>':
                 return isLookaheadEqualSymbol
-                    ? new Token(TokenType.GreaterThanOrEqual, '>=', line, column)
-                    : new Token(TokenType.GreaterThan, '>', line, column);
+                    ? new Token(TokenType.GreaterOrEqual, '>=', line, column)
+                    : new Token(TokenType.Greater, '>', line, column);
 
             case '<':
                 return isLookaheadEqualSymbol
-                    ? new Token(TokenType.LessThanOrEqual, '<=', line, column)
-                    : new Token(TokenType.LessThan, '<', line, column);
+                    ? new Token(TokenType.LessOrEqual, '<=', line, column)
+                    : new Token(TokenType.Less, '<', line, column);
 
             case '=':
                 return isLookaheadEqualSymbol
@@ -84,6 +99,51 @@ export class Lexer {
         }
 
     }
+
+	recognizeBooleanOperator() {
+		console.log('recognising boolean operator');
+		let position = this.position;
+		let line = this.line;
+		let column = this.column;
+		let character = this.input.charAt(position);
+
+		// 'lookahead' is the next character in the input
+		// or 'null' if 'character' was the last character.
+		let lookahead = position + 1 < this.input.length ? this.input.charAt(position + 1) : null;
+
+		// Whether the 'lookahead' character exists'.
+		let isLookaheadEqualSymbol = lookahead !== null;
+
+		this.position += 1;
+		this.column += 1;
+
+		if (isLookaheadEqualSymbol) {
+			this.position += 1;
+			this.column += 1;
+		}
+
+		switch (character) {
+			case '!':
+				return isLookaheadEqualSymbol && lookahead === '='
+					? new Token(TokenType.NotEqual, '!=', line, column)
+					: new Token(TokenType.Not, '!', line, column);
+
+			case '&':
+				return isLookaheadEqualSymbol && lookahead === '&'
+					? new Token(TokenType.And, '&&', line, column)
+					: new Error('Unrecognized character ${character} at line ${this.line} and column ${this.column}.');
+
+			case '|':
+				return isLookaheadEqualSymbol
+					? new Token(TokenType.Or, '||', line, column)
+					: new Error('Unrecognized character ${character} at line ${this.line} and column ${this.column}.');
+
+
+			default:
+				break;
+		}
+
+	}
 
     recognizeArithmeticOperator() {
         let position = this.position;
@@ -106,12 +166,14 @@ export class Lexer {
 
             case '/':
                 return new Token(TokenType.Div, '/', line, column);
+
+			case '%':
+				return new Token(TokenType.Modulo, '%', line, column);
         }
     }
 
     recognizeNewLine() {
         console.log('trying to recognizeNewLine');
-        let position = this.position;
         let line = this.line;
         let column = this.column;
 
@@ -119,6 +181,16 @@ export class Lexer {
         this.column += 1;
         return new Token(TokenType.Newline, '\n', line, column);
     }
+
+	recognizeDot() {
+    	console.log('in recognize Dot');
+		let line = this.line;
+		let column = this.column;
+
+		this.position += 1;
+		this.column += 1;
+		return new Token(TokenType.Dot, '.', line, column);
+	}
 
     /// Recognizes and returns an identifier token.
     recognizeIdentifier() {
@@ -155,13 +227,42 @@ export class Lexer {
             return new Token(TokenType.Func, 'func', line, column);
         } else if (identifier === 'else') {
             return new Token(TokenType.Else, 'else', line, column);
-        }
+        } else if (identifier === 'extends') {
+			return new Token(TokenType.Extends, 'extends', line, column);
+		} else if (identifier === 'final') {
+			return new Token(TokenType.Final, 'final', line, column);
+		} else if (identifier === 'for') {
+			return new Token(TokenType.For, 'for', line, column);
+		} else if (identifier === 'in') {
+			return new Token(TokenType.In, 'in', line, column);
+		} else if (identifier === 'if') {
+			return new Token(TokenType.If, 'if', line, column);
+		} else if (identifier === 'let') {
+			return new Token(TokenType.Let, 'let', line, column);
+		} else if (identifier === 'new') {
+			return new Token(TokenType.New, 'new', line, column);
+		} else if (identifier === 'null') {
+			return new Token(TokenType.Null, 'null', line, column);
+		} else if (identifier === 'private') {
+			return new Token(TokenType.Private, 'private', line, column);
+		} else if (identifier === 'return') {
+			return new Token(TokenType.Return, 'return', line, column);
+		} else if (identifier === 'super') {
+			return new Token(TokenType.Super, 'super', line, column);
+		} else if (identifier === 'this') {
+			return new Token(TokenType.This, 'this', line, column);
+		} else if (identifier === 'var') {
+			return new Token(TokenType.Var, 'var', line, column);
+		} else if (identifier === 'while') {
+			return new Token(TokenType.While, 'while', line, column);
+		}
 
         return new Token(TokenType.Identifier, identifier, line, column);
     }
 
     /// Recognizes and returns a number token.
-    recognizeNumber() {
+	// Decimal number can start with a dot...
+    recognizeNumberOrDot() {
         console.log('trying to recognizeNumber');
         let line = this.line;
         let column = this.column;
@@ -191,10 +292,10 @@ export class Lexer {
             } else if (state === 4) {
                 tokenType = TokenType.Decimal;
             }
-
-
             return new Token(tokenType, number, line, column);
-        }
+        } else if (number === '.' && state === 3) {
+        	return this.recognizeDot();
+		}
     }
 
     recognizeString() {
@@ -337,15 +438,15 @@ export class Lexer {
         }
 
         if (CharUtils.isBeginningOfNumber(character)) {
-            return this.recognizeNumber();
+            return this.recognizeNumberOrDot();
         }
 
         if (CharUtils.isOperator(character)) {
             return this.recognizeOperator();
         }
 
-        if (CharUtils.isParenthesis(character)) {
-            return this.recognizeParenthesis();
+        if (CharUtils.isDelimiter(character)) {
+            return this.recognizeDelimiter();
         }
 
         if (character === '"') {

@@ -12,7 +12,7 @@
   },
   "scripts": {
     "build": "babel src --source-maps --out-dir build",
-    "test": "mocha --recursive build/test/"
+    "test": "babel src --source-maps --out-dir build && mocha --recursive build/test/"
   },
   "repository": {
     "type": "git",
