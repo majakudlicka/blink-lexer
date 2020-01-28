@@ -5,7 +5,7 @@ export class CharUtils {
 	}
 
 	static isWhitespace(char) {
-		return /\s/.test(char);
+			return /[ \t\r\f\v\u00A0\u2028\u2029]/.test(char);
 	}
 
 	static isArithmeticOperator(char) {
@@ -13,7 +13,6 @@ export class CharUtils {
 	}
 
 	static isDigit(char) {
-		console.log('in isDigit');
 		return /[0-9]/.test(char);
 	}
 
@@ -21,16 +20,15 @@ export class CharUtils {
 		return /[a-zA-Z]/.test(char);
 	}
 
-	// static isParenthesis(char) {
-	// 	return /[()]/.test(char);
+	// static isWhitespaceOrNewLine(char) {
+	// 	return /[\s\n]/.test(char);
 	// }
 
-	static isWhitespaceOrNewLine(char) {
-		return /\s\n/.test(char);
+	static isWhiteSpace(char) {
+		return /[\s]/.test(char);
 	}
 
 	static isNewLine(char) {
-		console.log('inside isnewLine');
 		return /\n/.test(char);
 	}
 

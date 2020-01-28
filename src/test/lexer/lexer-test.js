@@ -4,7 +4,7 @@ import { Lexer } from '../../main/lexer/lexer'
 
 describe('Lexer', () => {
 
-    describe.only('#nextToken', () => {
+    describe('#nextToken', () => {
 
         it('should recognize a newline character as a single token', () => {
             var lexer = new Lexer('\n');
@@ -693,6 +693,8 @@ describe('Lexer', () => {
 
             var tokens = lexer.tokenize();
 
+            console.log('TOKENS ---->> ', tokens);
+
             assert.equal(21, tokens.length);
 
             assert.equal(tokens[0].type, TokenType.Func);
@@ -727,7 +729,7 @@ describe('Lexer', () => {
             assert.equal(tokens[12].type, TokenType.Identifier);
             assert.equal(tokens[12].value, 'Int');
 
-            assert.equal(tokens[13].type, TokenType.Equal);
+            assert.equal(tokens[13].type, TokenType.Assign);
 
             assert.equal(tokens[14].type, TokenType.LeftBrace);
 
@@ -752,6 +754,8 @@ describe('Lexer', () => {
                 '}');
 
             var tokens = lexer.tokenize();
+
+            console.log('tokens ', tokens);
 
             assert.equal(0, tokens[0].line);
             assert.equal(0, tokens[0].column);
@@ -817,10 +821,12 @@ describe('Lexer', () => {
             assert.equal(0, tokens[20].column);
         });
 
-        it('should tokenize a simple expression', () => {
+        it.only('should tokenize a simple expression', () => {
             var lexer = new Lexer('42 + 21');
 
             var tokens = lexer.tokenize();
+
+            console.log('tokens ', tokens);
 
             assert.equal(3, tokens.length);
 

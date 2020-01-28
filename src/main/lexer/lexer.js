@@ -178,7 +178,8 @@ export class Lexer {
         let column = this.column;
 
         this.position += 1;
-        this.column += 1;
+        this.column = 0;
+        this.line +=1;
         return new Token(TokenType.Newline, '\n', line, column);
     }
 
@@ -210,9 +211,6 @@ export class Lexer {
             identifier += character;
             position += 1;
         }
-
-        console.log('at the end of the loop identifier is ', identifier);
-        console.log('typeof identifier ', typeof identifier);
 
         this.position += identifier.length;
         this.column += identifier.length;
@@ -272,7 +270,13 @@ export class Lexer {
 
         // The input to the FSM will be all the characters from
         // the current position to the rest of the lexer's input.
-        let fsmInput = this.input.substring(this.position);
+		// TODO: cut at whitespace
+		let fsmInput = this.input.substring(this.position)[0];
+		let i = 1;
+		while (!CharUtils.isWhiteSpace(this.input.substring(this.position)[i]) && i <= this.input.length) {
+			fsmInput += this.input.substring(this.position)[i];
+			i++;
+		}
         console.log('fsmInput ', fsmInput);
 
         // Here, in addition of the FSM returning whether a number
@@ -423,33 +427,39 @@ export class Lexer {
         }
 
         // We skip all the whitespaces and new lines in the input.
-        // this.skipWhitespacesAndNewLines();
+        this.skipWhitespaces();
 
         let character = this.input.charAt(this.position);
 
         console.log('character is ', character);
 
         if (CharUtils.isNewLine(character)) {
+        	console.log('acknowledged newLIne');
             return this.recognizeNewLine();
         }
 
         if (CharUtils.isLetter(character)) {
+			console.log('acknowledged Letter');
             return this.recognizeIdentifier();
         }
 
         if (CharUtils.isBeginningOfNumber(character)) {
+			console.log('acknowledged beginningOfNumber');
             return this.recognizeNumberOrDot();
         }
 
         if (CharUtils.isOperator(character)) {
+			console.log('acknowledged Operator');
             return this.recognizeOperator();
         }
 
         if (CharUtils.isDelimiter(character)) {
+			console.log('acknowledged Delimiter');
             return this.recognizeDelimiter();
         }
 
         if (character === '"') {
+			console.log('acknowledged DoubleQuotes');
             return this.recognizeString();
         }
 
@@ -458,20 +468,16 @@ export class Lexer {
         throw new Error('Unrecognized character ${character} at line ${this.line} and column ${this.column}.');
     }
 
-    skipWhitespacesAndNewLines() {
-        while (this.position < this.input.length && CharUtils.isWhitespaceOrNewLine(this.input.charAt(this.position))) {
+    skipWhitespaces() {
+    	console.log('in wkipWhitespaces and new lines');
+        while (this.position < this.input.length && CharUtils.isWhitespace(this.input.charAt(this.position))) {
+        	console.log('inside the while loop');
             this.position += 1;
-
-            if (CharUtils.isNewLine(this.input.charAt(this.position))) {
-                this.line += 1;
-                this.column = 0
-            } else {
-                this.column += 1;
-            }
+           	this.column += 1;
         }
     }
 
-    allTokens() {
+    tokenize() {
         let token = this.nextToken();
         let tokens = [];
 
