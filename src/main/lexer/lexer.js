@@ -243,13 +243,7 @@ export class Lexer {
 
         // The input to the FSM will be all the characters from
         // the current position to the rest of the lexer's input.
-		let fsmInput = this.input.substring(this.position)[0];
-		let i = 1;
-		while (CharUtils.isValidPartOfNumber(this.input.substring(this.position)[i]) && (this.position + i) < this.input.length) {
-			fsmInput += this.input.substring(this.position)[i];
-			i++;
-		}
-        console.log('fsmInput ', fsmInput);
+		let fsmInput = this.input.substring(this.position);
 
         // Here, in addition of the FSM returning whether a number
         // has been recognized or not, it also returns the number

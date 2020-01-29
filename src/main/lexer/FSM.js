@@ -1,3 +1,5 @@
+export const InvalidFsmState = -1;
+
 export class FSM {
 	constructor(states, initialState, acceptingStates, nextState) {
 		this.states = states;
@@ -11,6 +13,7 @@ export class FSM {
 	/// the regular expression corresponding to this FSM.
 	run(input) {
 		let currentState = this.initialState;
+		let value = '';
 
 		console.log({
 			states: this.states,
@@ -30,13 +33,14 @@ export class FSM {
 			// 	return {isNumberRecognized: true, number: input, state: nextState};
 			// }
 
-			// if (nextState === NoNextState) {
-			// 	break;
-			// }
+			if (nextState === InvalidFsmState) {
+				break;
+			}
 
 			currentState = nextState;
+			value += input[i];
 		}
 
-		return {isNumberRecognized: this.acceptingStates.has(currentState), number: input, state: currentState};
+		return {isNumberRecognized: this.acceptingStates.has(currentState), number: value, state: currentState};
 	}
 }

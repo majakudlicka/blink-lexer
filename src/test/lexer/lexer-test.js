@@ -51,8 +51,6 @@ describe('Lexer', () => {
             assert.equal(token.value, '.25');
         });
 
-        // TODO Negative numbers?
-
         // it('should recognize a decimal in scientific notation', () => {
         //     var lexer = new Lexer('2e65');
         //
@@ -152,7 +150,6 @@ describe('Lexer', () => {
             assert.equal(token.value, 'anIdentifier');
         });
 
-        // TODO Look at solution for FSM, for instance including - characters and returning early
         it('should recognize an identifier starting with underscore (_)', () => {
             var lexer = new Lexer('_identifier');
 
@@ -189,7 +186,6 @@ describe('Lexer', () => {
             assert.equal(token.value, 'identifier1');
         });
 
-        // TODO clean up this ugly java-resembling idea
         // it('should recognize the abstract keyword', () => {
         //     var lexer = new Lexer('abstract');
         //
@@ -352,14 +348,14 @@ describe('Lexer', () => {
             assert.equal(token.value, 'super');
         });
 
-        // it('should recognize the to keyword', () => {
-        //     var lexer = new Lexer('to');
-		//
-        //     var token = lexer.nextToken();
-		//
-        //     assert.equal(token.type, TokenType.To);
-        //     assert.equal(token.value, 'to');
-        // });
+        it('should recognize the to keyword', () => {
+            var lexer = new Lexer('to');
+
+            var token = lexer.nextToken();
+
+            assert.equal(token.type, TokenType.To);
+            assert.equal(token.value, 'to');
+        });
 
         it('should recognize the this keyword', () => {
             var lexer = new Lexer('this');
