@@ -20,27 +20,23 @@ export class CharUtils {
 		return /[a-zA-Z]/.test(char);
 	}
 
-	// static isWhitespaceOrNewLine(char) {
-	// 	return /[\s\n]/.test(char);
-	// }
-
-	static isWhiteSpace(char) {
-		return /[\s]/.test(char);
+	static isLetterOrUnderscore(char) {
+		return this.isLetter(char) || char === '_';
 	}
 
 	static isNewLine(char) {
-		return /\n/.test(char);
+		return /[\n]/.test(char);
 	}
 
 	static isBooleanOperator(char) {
-		return /!&|/.test(char);
+		return /[!&|]/.test(char);
 	}
 
 	static isComparisonOperator(char) {
 		return /[<>=]/.test(char);
 	}
 
-	static isBeginningOfNumber(char) {
+	static isValidPartOfNumber(char) {
 		return this.isDigit(char) || char === '.';
 	}
 

@@ -51,6 +51,8 @@ describe('Lexer', () => {
             assert.equal(token.value, '.25');
         });
 
+        // TODO Negative numbers?
+
         // it('should recognize a decimal in scientific notation', () => {
         //     var lexer = new Lexer('2e65');
         //
@@ -150,14 +152,15 @@ describe('Lexer', () => {
             assert.equal(token.value, 'anIdentifier');
         });
 
-        // it('should recognize an identifier starting with underscore (_)', () => {
-        //     var lexer = new Lexer('_identifier');
-        //
-        //     var token = lexer.nextToken();
-        //
-        //     assert.equal(token.type, TokenType.Identifier);
-        //     assert.equal(token.value, '_identifier');
-        // });
+        // TODO Look at solution for FSM, for instance including - characters and returning early
+        it('should recognize an identifier starting with underscore (_)', () => {
+            var lexer = new Lexer('_identifier');
+
+            var token = lexer.nextToken();
+
+            assert.equal(token.type, TokenType.Identifier);
+            assert.equal(token.value, '_identifier');
+        });
 
         it('should recognize an identifier containing an underscore (_)', () => {
             var lexer = new Lexer('an_identifier');
@@ -821,7 +824,7 @@ describe('Lexer', () => {
             assert.equal(0, tokens[20].column);
         });
 
-        it.only('should tokenize a simple expression', () => {
+        it('should tokenize a simple arithmetic expression with +', () => {
             var lexer = new Lexer('42 + 21');
 
             var tokens = lexer.tokenize();
@@ -835,6 +838,25 @@ describe('Lexer', () => {
 
             assert.equal(tokens[1].type, TokenType.Plus);
             assert.equal(tokens[1].value, '+');
+
+            assert.equal(tokens[2].type, TokenType.Integer);
+            assert.equal(tokens[2].value, '21');
+        });
+
+        it('should tokenize a simple expression expression with %', () => {
+            var lexer = new Lexer('42%21');
+
+            var tokens = lexer.tokenize();
+
+            console.log('tokens ', tokens);
+
+            assert.equal(3, tokens.length);
+
+            assert.equal(tokens[0].type, TokenType.Integer);
+            assert.equal(tokens[0].value, '42');
+
+            assert.equal(tokens[1].type, TokenType.Modulo);
+            assert.equal(tokens[1].value, '%');
 
             assert.equal(tokens[2].type, TokenType.Integer);
             assert.equal(tokens[2].value, '21');

@@ -12,7 +12,12 @@ export class FSM {
 	run(input) {
 		let currentState = this.initialState;
 
-		console.log({states: this.states, initialState: this.initialState, acceptingStates: this.acceptingStates, nextState: this.nextState});
+		console.log({
+			states: this.states,
+			initialState: this.initialState,
+			acceptingStates: this.acceptingStates,
+			nextState: this.nextState
+		});
 
 		for (let i = 0, length = input.length; i < length; ++i) {
 			let character = input.charAt(i);
@@ -32,6 +37,6 @@ export class FSM {
 			currentState = nextState;
 		}
 
-		return { isNumberRecognized: this.acceptingStates.has(currentState), number: input, state: currentState};
+		return {isNumberRecognized: this.acceptingStates.has(currentState), number: input, state: currentState};
 	}
 }

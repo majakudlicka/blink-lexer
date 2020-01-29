@@ -11,8 +11,6 @@ export class Lexer {
         this.column = 0;
     }
 
-    /// Recognizes and returns a parenthesis token.
-	// TODO Could add newLine here
     recognizeDelimiter() {
         let position = this.position;
         let line = this.line;
@@ -22,20 +20,7 @@ export class Lexer {
         this.position += 1;
         this.column += 1;
 
-        const delimiterMap = {
-        	':': 'Colon',
-			',': 'Comma',
-			'{': 'LeftBrace',
-			'[': 'LeftBracket',
-			'(': 'LeftParen',
-			'}': 'RightBrace',
-			']': 'RightBracket',
-			')': 'RightParen'
-		};
-
-        const delimiterType = delimiterMap[character];
-
-        return new Token(TokenType[delimiterType], character, line, column);
+        return new Token(character, character, line, column);
     }
 
     /// Recognizes and returns an operator token.
@@ -215,45 +200,33 @@ export class Lexer {
         this.position += identifier.length;
         this.column += identifier.length;
 
-        if (identifier === 'true') {
-            return new Token(TokenType.True, 'true', line, column);
-        } else if (identifier === 'false') {
-            return new Token(TokenType.False, 'false', line, column);
-        } else if (identifier === 'class') {
-            return new Token(TokenType.Class, 'class', line, column);
-        } else if (identifier === 'func') {
-            return new Token(TokenType.Func, 'func', line, column);
-        } else if (identifier === 'else') {
-            return new Token(TokenType.Else, 'else', line, column);
-        } else if (identifier === 'extends') {
-			return new Token(TokenType.Extends, 'extends', line, column);
-		} else if (identifier === 'final') {
-			return new Token(TokenType.Final, 'final', line, column);
-		} else if (identifier === 'for') {
-			return new Token(TokenType.For, 'for', line, column);
-		} else if (identifier === 'in') {
-			return new Token(TokenType.In, 'in', line, column);
-		} else if (identifier === 'if') {
-			return new Token(TokenType.If, 'if', line, column);
-		} else if (identifier === 'let') {
-			return new Token(TokenType.Let, 'let', line, column);
-		} else if (identifier === 'new') {
-			return new Token(TokenType.New, 'new', line, column);
-		} else if (identifier === 'null') {
-			return new Token(TokenType.Null, 'null', line, column);
-		} else if (identifier === 'private') {
-			return new Token(TokenType.Private, 'private', line, column);
-		} else if (identifier === 'return') {
-			return new Token(TokenType.Return, 'return', line, column);
-		} else if (identifier === 'super') {
-			return new Token(TokenType.Super, 'super', line, column);
-		} else if (identifier === 'this') {
-			return new Token(TokenType.This, 'this', line, column);
-		} else if (identifier === 'var') {
-			return new Token(TokenType.Var, 'var', line, column);
-		} else if (identifier === 'while') {
-			return new Token(TokenType.While, 'while', line, column);
-		}
+        const keywords = [
+            'class',
+            'else',
+            'extends',
+            'false',
+            'final',
+            'func',
+            'for',
+            'if',
+            'in',
+            'let',
+            'new',
+            'null',
+            'override',
+            'private',
+            'return',
+            'super',
+            'to',
+            'this',
+            'true',
+            'var',
+            'while'
+        ];
+
+        if (keywords.includes(identifier)) {
+            return new Token(identifier, identifier, line, column);
+        }
 
         return new Token(TokenType.Identifier, identifier, line, column);
     }
@@ -261,7 +234,7 @@ export class Lexer {
     /// Recognizes and returns a number token.
 	// Decimal number can start with a dot...
     recognizeNumberOrDot() {
-        console.log('trying to recognizeNumber');
+        console.log('trying to recognizeNumberOrDot');
         let line = this.line;
         let column = this.column;
 
@@ -270,10 +243,9 @@ export class Lexer {
 
         // The input to the FSM will be all the characters from
         // the current position to the rest of the lexer's input.
-		// TODO: cut at whitespace
 		let fsmInput = this.input.substring(this.position)[0];
 		let i = 1;
-		while (!CharUtils.isWhiteSpace(this.input.substring(this.position)[i]) && i <= this.input.length) {
+		while (CharUtils.isValidPartOfNumber(this.input.substring(this.position)[i]) && (this.position + i) < this.input.length) {
 			fsmInput += this.input.substring(this.position)[i];
 			i++;
 		}
@@ -438,12 +410,12 @@ export class Lexer {
             return this.recognizeNewLine();
         }
 
-        if (CharUtils.isLetter(character)) {
+        if (CharUtils.isLetterOrUnderscore(character)) {
 			console.log('acknowledged Letter');
             return this.recognizeIdentifier();
         }
 
-        if (CharUtils.isBeginningOfNumber(character)) {
+        if (CharUtils.isValidPartOfNumber(character)) {
 			console.log('acknowledged beginningOfNumber');
             return this.recognizeNumberOrDot();
         }
